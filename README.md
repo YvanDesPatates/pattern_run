@@ -1,4 +1,4 @@
-# Pattern Run
+# Pattern Run !🏃‍♀️
 
 A small 3D game to learn and understand software architecture and design patterns 🎓.
 
