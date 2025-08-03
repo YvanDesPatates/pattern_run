@@ -1,0 +1,36 @@
+@startuml
+
+interface IGameOverSubscriber {
+    +OnGameOver() : void
+}
+
+class GameOverPublisher {
+    -subscribers : List<IGameOverSubscriber>
+    -{static}Instance : GameOverPublisher
+    +Subscribe(subscriber : IGameOverSubscriber) : void
+    +GameOver() : void
+    +{static}GetInstance()
+    -Notify()
+    __singleton__
+}
+
+class Spawner {
+    +OnGameOver() : void
+}
+
+class PlayerController {
+}
+
+class GameManager {
+    +PlayerDied() : void
+}
+
+
+GameOverPublisher o--> IGameOverSubscriber : notify >
+Spawner .up.|> IGameOverSubscriber
+Spawner -right-> GameOverPublisher : Subscribe()
+
+PlayerController --> GameManager : PlayerDied()
+GameManager --> GameOverPublisher : GameOver()
+
+@enduml
