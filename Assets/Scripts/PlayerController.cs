@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _isOnGround && !_gameOver)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0) && _isOnGround && !_gameOver)
         {
             _playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             _isOnGround = false;
