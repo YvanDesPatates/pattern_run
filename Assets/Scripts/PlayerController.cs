@@ -1,7 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,11 +10,32 @@ public class PlayerController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip crashSound;
     
+    private PlayerInputActions _inputActions;
     private Rigidbody _playerRb;
     private bool _isOnGround = true;
     private bool _gameOver = false;
     private Animator _playerAnim;
     private AudioSource _playerAudio;
+    private bool _actionKeyIsPressed = false;
+    
+    private void Awake()
+    {
+        _inputActions = new PlayerInputActions();
+    }
+    
+    private void OnEnable()
+    {
+        _inputActions.Player.Enable();
+        _inputActions.Player.PlayerAction.performed += OnActionKeyPress;
+        _inputActions.Player.PlayerAction.canceled += OnActionKeyRelease;
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Player.PlayerAction.performed -= OnActionKeyPress;
+        _inputActions.Player.PlayerAction.canceled -= OnActionKeyRelease;
+        _inputActions.Player.Disable();
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -30,7 +49,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0) && _isOnGround && !_gameOver)
+        if (_gameOver) return;
+        
+        
+        if (_actionKeyIsPressed && _isOnGround)
         {
             _playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             _isOnGround = false;
@@ -51,6 +73,16 @@ public class PlayerController : MonoBehaviour
         {
             GameOver();
         }
+    }
+    
+    private void OnActionKeyPress(InputAction.CallbackContext context)
+    {
+        _actionKeyIsPressed = true;
+    }
+
+    private void OnActionKeyRelease(InputAction.CallbackContext context)
+    {
+        _actionKeyIsPressed = false;
     }
 
     private void GameOver()
