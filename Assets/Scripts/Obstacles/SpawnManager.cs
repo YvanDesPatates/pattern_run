@@ -3,17 +3,20 @@ using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject obstaclePrefab;
-    public float minRangeSpawnInSec;
-    public float maxRangeSpawnInSec;
+    [SerializeField] private GameObject obstaclePrefab;
+    [SerializeField] private float minRangeSpawnInSec;
+    [SerializeField] private float maxRangeSpawnInSec;
+    [Tooltip("Y position where the obstacles will be spawned. Default is 0 to spawn on the ground.")]
+    [SerializeField] private float ySpawnPosition = 0f;
     
-    private readonly Vector3 _spawnPos = new Vector3(25, 0, 0);
+    private Vector3 _spawnPos;
     private float _lastSpawnTime;
     private float _spawnCoolDown = 0;
     private PlayerController _playerControllerScript;
 
     private void Start()
     {
+        _spawnPos = new Vector3(25, ySpawnPosition, 0);
         _lastSpawnTime = Time.time;
         _playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
     }
