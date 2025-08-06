@@ -7,6 +7,7 @@ interface IGameOverSubscriber {
 class GameOverPublisher {
     -subscribers : List<IGameOverSubscriber>
     -{static}Instance : GameOverPublisher
+    -constructor()
     +Subscribe(subscriber : IGameOverSubscriber) : void
     +GameOver() : void
     +{static}GetInstance()
