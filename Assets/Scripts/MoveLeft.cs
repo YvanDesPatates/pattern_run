@@ -1,27 +1,29 @@
 using UnityEngine;
 
-public class MoveLeft : MonoBehaviour
+public class MoveLeft : MonoBehaviour, IGameOverSubscriber
 {
     public float speed;
-    
-    private PlayerController _playerControllerScript;
-    private float _leftBound = -15; 
+
+    private const float LeftBound = -15;
+
     private void Start()
     {
-        _playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+        GameOverPublisher.GetInstance().Subscribe(this);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if ( ! _playerControllerScript.IsGameOver() )
-        {
-            transform.Translate(speed * Time.deltaTime * Vector3.left);
-        }
-
-        if (transform.position.x < _leftBound && gameObject.CompareTag("Obstacle"))
+        transform.Translate(speed * Time.deltaTime * Vector3.left);
+        
+        if (transform.position.x < LeftBound && gameObject.CompareTag("Obstacle"))
         {
             Destroy(gameObject);
         }
+    }
+
+    public void OnGameOver()
+    {
+        speed = 0;
     }
 }

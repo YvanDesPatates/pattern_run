@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Obstacle"))
         {
-            GameOver();
+            OnGameOver();
         }
     }
     
@@ -85,18 +85,14 @@ public class PlayerController : MonoBehaviour
         _actionKeyIsPressed = false;
     }
 
-    private void GameOver()
+    private void OnGameOver()
     {
+        GameOverPublisher.GetInstance().GameOver();
         _gameOver = true;
         explosionParticle.Play();
         dirtParticle.Stop();
         _playerAnim.SetBool("Death_b", true);
         _playerAnim.SetInteger("DeathType_int", 1);
         _playerAudio.PlayOneShot(crashSound, 1);
-    }
-
-    public bool IsGameOver()
-    {
-        return _gameOver;
     }
 }
