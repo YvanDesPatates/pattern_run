@@ -17,9 +17,13 @@ public class PlayerController : MonoBehaviour
     private Animator _playerAnim;
     private AudioSource _playerAudio;
     private bool _actionKeyIsPressed = false;
+    private GameManager _gameManager;
+    
+    private static Vector3 _initialGravity = Physics.gravity;
     
     private void Awake()
     {
+        _gameManager = Util.FindObjectOfTypeOrLogError<GameManager>();
         _inputActions = new PlayerInputActions();
     }
     
@@ -41,7 +45,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _playerRb = GetComponent<Rigidbody>();
-        Physics.gravity *= gravityModifier;
+        Debug.Log(Physics.gravity);
+        Physics.gravity = _initialGravity * gravityModifier;
         _playerAnim = GetComponent<Animator>();
         _playerAudio = GetComponent<AudioSource>();
     }
@@ -87,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnGameOver()
     {
-        GameOverPublisher.GetInstance().GameOver();
+        _gameManager.OnGameOver();
         _gameOver = true;
         explosionParticle.Play();
         dirtParticle.Stop();
