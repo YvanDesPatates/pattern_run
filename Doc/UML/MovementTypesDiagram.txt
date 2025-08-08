@@ -1,0 +1,33 @@
+@startuml
+
+interface IMovementStrategy {
+    +OnActionKeyPressed(player : PlayerController) : void
+    +OnActionKeyReleased(player : PlayerController) : void
+}
+
+class JumpStrategy {
+    +OnActionKeyPressed(player : PlayerController) : void
+    +OnActionKeyReleased(player : PlayerController) : void
+}
+
+class AdjustableJumpStrategy {
+    +OnActionKeyPressed(player : PlayerController) : void
+    +OnActionKeyReleased(player : PlayerController) : void
+}
+
+class PlayerController {
+    -movementStrategy : IMovementStrategy
+    +ChangeMovementType(strategy : IMovementStrategy) : void
+}
+
+class ChangingMovementTypeZone {
+    -movementStrategy : IMovementStrategy
+    -OnTriggerEnter() : void
+}
+
+PlayerController o-left- IMovementStrategy : uses >
+JumpStrategy .up.|> IMovementStrategy
+AdjustableJumpStrategy .up.|> IMovementStrategy
+ChangingMovementTypeZone --> PlayerController : ChangeMovementType(movementStrategy)
+
+@enduml
