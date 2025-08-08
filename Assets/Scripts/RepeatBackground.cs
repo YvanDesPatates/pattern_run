@@ -7,13 +7,13 @@ public class RepeatBackground : MonoBehaviour
     private Vector3 _startPos;
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _startPos = transform.position;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (transform.position.x < _startPos.x - xOffset)
         {

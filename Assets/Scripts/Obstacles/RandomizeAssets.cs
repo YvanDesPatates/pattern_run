@@ -8,7 +8,7 @@ public class RandomizeAssets : MonoBehaviour
     [SerializeField] private Transform assetsParent;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         if (smallObstacles == null || smallObstacles.Count == 0 || largeObstacles == null || largeObstacles.Count == 0)
         {

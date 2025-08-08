@@ -15,7 +15,7 @@ public class GameOverCanvasController : MonoBehaviour
         SetBackgroundAlpha(0);
     }
 
-    void Update()
+    private void Update()
     {
         // fade in the Game Over text and background
         if (gameOverText.color.a < 1.0f)

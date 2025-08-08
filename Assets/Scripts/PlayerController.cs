@@ -42,17 +42,16 @@ public class PlayerController : MonoBehaviour
     }
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _playerRb = GetComponent<Rigidbody>();
-        Debug.Log(Physics.gravity);
         Physics.gravity = _initialGravity * gravityModifier;
         _playerAnim = GetComponent<Animator>();
         _playerAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_gameOver) return;
         

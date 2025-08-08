@@ -5,6 +5,11 @@ public class MoveLeft : MonoBehaviour, IGameOverSubscriber
     public float speed;
 
     private const float LeftBound = -15;
+    
+    public void OnGameOver()
+    {
+        speed = 0;
+    }
 
     private void Start()
     {
@@ -21,9 +26,5 @@ public class MoveLeft : MonoBehaviour, IGameOverSubscriber
             Destroy(gameObject);
         }
     }
-
-    public void OnGameOver()
-    {
-        speed = 0;
-    }
+    
 }

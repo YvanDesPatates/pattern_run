@@ -14,6 +14,11 @@ public class SpawnManager : MonoBehaviour, IGameOverSubscriber
     private float _lastSpawnTime;
     private float _spawnCoolDown = 0;
     private bool _isGameOver;
+    
+    public void OnGameOver()
+    {
+        _isGameOver = true;
+    }
 
     private void Start()
     {
@@ -24,7 +29,7 @@ public class SpawnManager : MonoBehaviour, IGameOverSubscriber
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_isGameOver) return;
 
@@ -34,11 +39,6 @@ public class SpawnManager : MonoBehaviour, IGameOverSubscriber
             _lastSpawnTime = Time.time;
             _spawnCoolDown = Random.Range(minRangeSpawnInSec, maxRangeSpawnInSec);
         }
-    }
-
-    public void OnGameOver()
-    {
-        _isGameOver = true;
     }
 
     private void SpawnObstacle()
