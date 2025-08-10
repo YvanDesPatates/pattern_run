@@ -34,7 +34,7 @@ public class JumpStrategy: IMovementStrategy
         player.PlayJumpSound();
     }
     
-    public void ResetBeforeDestroy()
+    public void ResetBeforeDestroy(PlayerController player)
     {
         Physics.gravity = InitialGravity;
     }

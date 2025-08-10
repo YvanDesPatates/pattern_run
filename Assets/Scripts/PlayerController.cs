@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_movementStrategy is not null)
         {
-            _movementStrategy.ResetBeforeDestroy();
+            _movementStrategy.ResetBeforeDestroy(this);
         }
         _movementStrategy = createNewMovementStrategy();
     }
@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour
     public void SetAnimationTrigger(string triggerName)
     { 
         _playerAnim.SetTrigger(triggerName);
+    }
+    
+    public void SetAnnimationFloat(string parameterName, float value)
+    {
+        _playerAnim.SetFloat(parameterName, value);
     }
 
     public void PlayJumpSound()
@@ -57,10 +62,6 @@ public class PlayerController : MonoBehaviour
         _inputActions.Player.PlayerAction.performed -= OnActionKeyPress;
         _inputActions.Player.PlayerAction.canceled -= OnActionKeyRelease;
         _inputActions.Player.Disable();
-        if (_movementStrategy is not null)
-        {
-            _movementStrategy.ResetBeforeDestroy();
-        }
     }
     
     // Start is called before the first frame update
@@ -123,5 +124,6 @@ public class PlayerController : MonoBehaviour
         _playerAnim.SetBool("Death_b", true);
         _playerAnim.SetInteger("DeathType_int", 1);
         _playerAudio.PlayOneShot(crashSound, 1);
+        _movementStrategy.ResetBeforeDestroy(this);
     }
 }

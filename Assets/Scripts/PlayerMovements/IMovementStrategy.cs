@@ -11,7 +11,7 @@ public interface IMovementStrategy
     /// <summary>
     /// Should reset any state or properties before the PlayerController destroy this strategy (probably to change for another).
     /// </summary>
-    public void ResetBeforeDestroy();
+    public void ResetBeforeDestroy(PlayerController player);
     /// <summary>
     /// called by PlayerController every frame to update the movement strategy.
     /// </summary>
