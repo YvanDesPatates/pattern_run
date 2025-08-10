@@ -19,13 +19,13 @@ public class PlayerController : MonoBehaviour
     private GameManager _gameManager;
     private IMovementStrategy _movementStrategy;
     
-    public void ChangeMovementStrategy(IMovementStrategy newMovementStrategy)
+    public void ChangeMovementStrategy(Func<IMovementStrategy> createNewMovementStrategy)
     {
         if (_movementStrategy is not null)
         {
             _movementStrategy.ResetBeforeDestroy();
         }
-        _movementStrategy = newMovementStrategy;
+        _movementStrategy = createNewMovementStrategy();
     }
     
     public void SetAnimationTrigger(string triggerName)
