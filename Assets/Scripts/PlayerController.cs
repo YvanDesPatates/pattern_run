@@ -1,30 +1,48 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float jumpForce;
-    public float gravityModifier;
-    public ParticleSystem explosionParticle;
-    public ParticleSystem dirtParticle;
-    public AudioClip jumpSound;
-    public AudioClip crashSound;
-    
+    [SerializeField] private ParticleSystem explosionParticle;
+    [SerializeField] private ParticleSystem dirtParticle;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip crashSound;
+
+    public Rigidbody PlayerRb { get; private set; }
+    public bool IsOnGround { get; set; } = true;
+
     private PlayerInputActions _inputActions;
-    private Rigidbody _playerRb;
-    private bool _isOnGround = true;
-    private bool _gameOver = false;
     private Animator _playerAnim;
     private AudioSource _playerAudio;
-    private bool _actionKeyIsPressed = false;
+    private bool _isGameOver = false;
     private GameManager _gameManager;
+    private IMovementStrategy _movementStrategy;
     
-    private static Vector3 _initialGravity = Physics.gravity;
+    public void ChangeMovementStrategy(IMovementStrategy newMovementStrategy)
+    {
+        if (_movementStrategy is not null)
+        {
+            _movementStrategy.ResetBeforeDestroy();
+        }
+        _movementStrategy = newMovementStrategy;
+    }
+    
+    public void SetAnimationTrigger(string triggerName)
+    { 
+        _playerAnim.SetTrigger(triggerName);
+    }
+
+    public void PlayJumpSound()
+    {
+        _playerAudio.PlayOneShot(jumpSound, 1);
+    }
     
     private void Awake()
     {
         _gameManager = Util.FindObjectOfTypeOrLogError<GameManager>();
         _inputActions = new PlayerInputActions();
+        _movementStrategy = new JumpStrategy();
     }
     
     private void OnEnable()
@@ -39,38 +57,25 @@ public class PlayerController : MonoBehaviour
         _inputActions.Player.PlayerAction.performed -= OnActionKeyPress;
         _inputActions.Player.PlayerAction.canceled -= OnActionKeyRelease;
         _inputActions.Player.Disable();
+        if (_movementStrategy is not null)
+        {
+            _movementStrategy.ResetBeforeDestroy();
+        }
     }
     
     // Start is called before the first frame update
     private void Start()
     {
-        _playerRb = GetComponent<Rigidbody>();
-        Physics.gravity = _initialGravity * gravityModifier;
-        _playerAnim = GetComponent<Animator>();
-        _playerAudio = GetComponent<AudioSource>();
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (_gameOver) return;
-        
-        
-        if (_actionKeyIsPressed && _isOnGround)
-        {
-            _playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            _isOnGround = false;
-            _playerAnim.SetTrigger("Jump_trig");
-            dirtParticle.Stop();
-            _playerAudio.PlayOneShot(jumpSound, 1);
-        }   
+        PlayerRb = Util.GetComponentOrLogError<Rigidbody>(gameObject);
+        _playerAnim = Util.GetComponentOrLogError<Animator>(gameObject);
+        _playerAudio = Util.GetComponentOrLogError<AudioSource>(gameObject);
     }
 
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            _isOnGround = true;
+            IsOnGround = true;
             dirtParticle.Play();
         }
         else if (other.gameObject.CompareTag("Obstacle"))
@@ -78,21 +83,41 @@ public class PlayerController : MonoBehaviour
             OnGameOver();
         }
     }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            dirtParticle.Stop();
+            IsOnGround = false;
+        }
+    }
     
+    private void Update()
+    {
+        if (_isGameOver) return;
+        
+        _movementStrategy.Update(this);
+    }
+
     private void OnActionKeyPress(InputAction.CallbackContext context)
     {
-        _actionKeyIsPressed = true;
+        if (_isGameOver) return;
+        
+        _movementStrategy.OnActionKeyPressed(this);
     }
 
     private void OnActionKeyRelease(InputAction.CallbackContext context)
     {
-        _actionKeyIsPressed = false;
+        if (_isGameOver) return;
+        
+        _movementStrategy.OnActionKeyReleased(this);
     }
 
     private void OnGameOver()
     {
         _gameManager.OnGameOver();
-        _gameOver = true;
+        _isGameOver = true;
         explosionParticle.Play();
         dirtParticle.Stop();
         _playerAnim.SetBool("Death_b", true);

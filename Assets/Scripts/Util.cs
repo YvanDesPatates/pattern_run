@@ -11,4 +11,14 @@ public class Util
         }
         return found;
     }
+    
+    public static T GetComponentOrLogError<T>(GameObject gameObject) where T : Component
+    {
+        var found = gameObject.GetComponent<T>();
+        if (found is null)
+        {
+            Debug.LogError($"{typeof(T).Name} not found in the GameObject {gameObject.name}");
+        }
+        return found;
+    }
 }
