@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,13 +18,13 @@ public class PlayerController : MonoBehaviour
     private GameManager _gameManager;
     private IMovementStrategy _movementStrategy;
     
-    public void ChangeMovementStrategy(Func<IMovementStrategy> createNewMovementStrategy)
+    public void ChangeMovementStrategy(MovementStrategyEnum newMovementStrategy)
     {
         if (_movementStrategy is not null)
         {
             _movementStrategy.ResetBeforeDestroy(this);
         }
-        _movementStrategy = createNewMovementStrategy();
+        _movementStrategy = MovementStrategyEnumUtil.GetMovementStrategy(newMovementStrategy);
     }
     
     public void SetAnimationTrigger(string triggerName)
