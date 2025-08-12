@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
         _playerAudio.PlayOneShot(jumpSound, 1);
     }
     
+    #region Unity Callbacks
     private void Awake()
     {
         _gameManager = Util.FindObjectOfTypeOrLogError<GameManager>();
@@ -92,7 +94,15 @@ public class PlayerController : MonoBehaviour
             IsOnGround = false;
         }
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("SucessZone") && !_isGameOver)
+        {
+            _gameManager.OnObstaclePassed();
+        }
+    }
+
     private void Update()
     {
         if (_isGameOver) return;
@@ -113,6 +123,7 @@ public class PlayerController : MonoBehaviour
         
         _movementStrategy.OnActionKeyReleased(this);
     }
+    #endregion
 
     private void OnGameOver()
     {

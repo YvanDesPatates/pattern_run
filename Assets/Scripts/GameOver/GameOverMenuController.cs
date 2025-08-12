@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOverCanvasController : MonoBehaviour
+public class GameOverMenuController : MonoBehaviour
 {
     [SerializeField] private int backgroundAlphaTarget = 200;
     [SerializeField] private float fadeDuration = 1.0f;

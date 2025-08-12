@@ -6,9 +6,17 @@ using UnityEngine.SceneManagement;
 public class GameManager: MonoBehaviour
 {
     [SerializeField] private GameObject gameOverCanvas;
+    [SerializeField] private ScoreMenuController scoreMenuController;
     
     private bool _allowRestartGame;
     private PlayerInputActions _inputActions;
+    private int _score;
+
+    public void OnObstaclePassed()
+    {
+        _score++;
+        scoreMenuController.SetScoreText(_score);
+    }
     
     public void OnGameOver()
     {
