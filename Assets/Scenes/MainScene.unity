@@ -754,7 +754,7 @@ MonoBehaviour:
   minSpawningIntervalInS: 5
   maxSpawningIntervalInS: 30
   iconMaterials:
-  - strategy: 2
+  - strategy: 3
     material: {fileID: 2100000, guid: c9a4518cf3664f12ea5ec938dd0bb9ff, type: 2}
 --- !u!4 &604960644
 Transform:

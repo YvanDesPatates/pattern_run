@@ -5,6 +5,7 @@ public enum MovementStrategyEnum
 {
     Jump,
     DoubleJump,
+    AdjsustableJump,
     GravityInvertion,
     Jetpack,
 }
@@ -16,6 +17,7 @@ public class MovementStrategyEnumUtil
         {
             MovementStrategyEnum.Jump => new JumpStrategy(),
             MovementStrategyEnum.DoubleJump => new DoubleJumpStrategy(),
+            MovementStrategyEnum.AdjsustableJump => new AdjsustableJumpStrategy(),
             MovementStrategyEnum.GravityInvertion => new GravityInvertionStrategy(),
             MovementStrategyEnum.Jetpack => new JetpackStrategy(),
             _ => throw new System.ArgumentOutOfRangeException(nameof(movementStrategyEnum), movementStrategyEnum, null)
