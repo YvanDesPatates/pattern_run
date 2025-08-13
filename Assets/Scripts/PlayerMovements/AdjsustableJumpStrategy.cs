@@ -40,7 +40,10 @@ public class AdjsustableJumpStrategy: IMovementStrategy
     
     private IEnumerator JumpCoroutine(PlayerController player)
     {
+        // first jump
         player.PlayerRb.AddForce(Vector3.up * _firstJumpForce, ForceMode.Impulse);
+        player.SetAnimationTrigger("Jump_trig"); 
+        player.PlayJumpSound();
             
         // adjustable jump
         bool playerIsGoingUpwards = true; //add force only until the player has reached the peak of the jump
