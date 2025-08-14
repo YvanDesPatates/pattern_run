@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem dirtParticle;
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private AudioClip crashSound;
+    [SerializeField] private GameObject jetpack;
 
     public Rigidbody PlayerRb { get; private set; }
     public bool IsOnGround { get; set; } = true;
@@ -43,12 +44,17 @@ public class PlayerController : MonoBehaviour
         _playerAudio.PlayOneShot(jumpSound, 1);
     }
     
+    public void SetJetpackVisibility(bool isVisible)
+    {
+        jetpack.SetActive(isVisible);
+    }
+    
     #region Unity Callbacks
     private void Awake()
     {
         _gameManager = Util.FindObjectOfTypeOrLogError<GameManager>();
         _inputActions = new PlayerInputActions();
-        _movementStrategy = new JumpStrategy();
+        _movementStrategy = new JetpackStrategy();
     }
     
     private void OnEnable()

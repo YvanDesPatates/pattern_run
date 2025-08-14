@@ -5,6 +5,7 @@ public class JetpackStrategy: IMovementStrategy
     private float _upwardForce = 660f;
     private float _gravityModifier = 2f;
     private bool _keyIsPressed;
+    private bool _jetpackIsActive;
     
     private static readonly Vector3 InitialGravity = Physics.gravity;
     
@@ -26,6 +27,7 @@ public class JetpackStrategy: IMovementStrategy
     public void ResetBeforeDestroy(PlayerController player)
     {
         Physics.gravity = InitialGravity;
+        player.SetJetpackVisibility(false);
     }
 
     public void Update(PlayerController player)
@@ -34,5 +36,9 @@ public class JetpackStrategy: IMovementStrategy
         {
             player.PlayerRb.AddForce(Vector3.up*_upwardForce);
         }
+        
+        if (_jetpackIsActive) return;
+        _jetpackIsActive = true;
+        player.SetJetpackVisibility(true);
     }
 }

@@ -6,9 +6,9 @@ public class ChangeMovementZoneSpawner : MonoBehaviour, IGameOverSubscriber
 {
     [SerializeField] private GameObject changeMovementZonePrefab;
     [SerializeField] private float minSpawningIntervalInS = 5f;
-    [SerializeField] private float maxSpawningIntervalInS = 15f;
+    [SerializeField] private float maxSpawningIntervalInS = 10f;
     [SerializeField] private List<MovementStrategyAndMaterialEntry> iconMaterials;
-    
+        
     private bool _isFirstSpawn = true;
     private MovementStrategyEnum _currentStrategy;
     private bool _isGameOver = false;
