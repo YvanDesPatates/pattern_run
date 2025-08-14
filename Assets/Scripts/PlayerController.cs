@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         _gameManager = Util.FindObjectOfTypeOrLogError<GameManager>();
         _inputActions = new PlayerInputActions();
-        _movementStrategy = new JetpackStrategy();
+        _movementStrategy = new JumpStrategy();
     }
     
     private void OnEnable()
