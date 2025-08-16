@@ -11572,6 +11572,7 @@ MonoBehaviour:
   jumpSound: {fileID: 8300000, guid: 0f7d0b7c3397f4dac91f20e8a77d2d57, type: 3}
   crashSound: {fileID: 8300000, guid: 4bcde6de2166e41e284ec46d8a01fb90, type: 3}
   jetpack: {fileID: 2079751325}
+  _gameManager: {fileID: 402700455}
 --- !u!65 &1366479666
 BoxCollider:
   m_ObjectHideFlags: 0

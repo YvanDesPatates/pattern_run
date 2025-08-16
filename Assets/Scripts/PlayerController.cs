@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip jumpSound;
     [SerializeField] private AudioClip crashSound;
     [SerializeField] private GameObject jetpack;
+    [SerializeField] private GameManager _gameManager;
 
     public Rigidbody PlayerRb { get; private set; }
     public bool IsOnGround { get; set; } = true;
@@ -17,7 +18,6 @@ public class PlayerController : MonoBehaviour
     private Animator _playerAnim;
     private AudioSource _playerAudio;
     private bool _isGameOver = false;
-    private GameManager _gameManager;
     private IMovementStrategy _movementStrategy;
     
     public void ChangeMovementStrategy(MovementStrategyEnum newMovementStrategy)
@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
     #region Unity Callbacks
     private void Awake()
     {
-        _gameManager = Util.FindObjectOfTypeOrLogError<GameManager>();
         _inputActions = new PlayerInputActions();
         _movementStrategy = new JumpStrategy();
     }

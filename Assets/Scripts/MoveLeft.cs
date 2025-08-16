@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MoveLeft : MonoBehaviour, IGameOverSubscriber
 {
-    public float speed;
+    [SerializeField] private float speed;
 
     private const float LeftBound = -15;
     
