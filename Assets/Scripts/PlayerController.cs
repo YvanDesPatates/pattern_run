@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Obstacle"))
         {
-            OnGameOver();
+            OnPlayerDied();
         }
     }
 
@@ -130,9 +130,9 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    private void OnGameOver()
+    private void OnPlayerDied()
     {
-        _gameManager.OnGameOver();
+        _gameManager.OnPlayerDied();
         _isGameOver = true;
         explosionParticle.Play();
         dirtParticle.Stop();

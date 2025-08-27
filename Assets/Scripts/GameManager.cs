@@ -18,7 +18,7 @@ public class GameManager: MonoBehaviour
         scoreMenuController.SetScoreText(_score);
     }
     
-    public void OnGameOver()
+    public void OnPlayerDied()
     {
         GameOverPublisher.GetInstance().GameOver();
         gameOverCanvas.SetActive(true);
