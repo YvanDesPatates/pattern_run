@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,16 +17,12 @@ public class PlayerController : MonoBehaviour
     private Animator _playerAnim;
     private AudioSource _playerAudio;
     private bool _isGameOver = false;
-    private IMovementStrategy _movementStrategy;
     
-    public void ChangeMovementStrategy(MovementStrategyEnum newMovementStrategy)
-    {
-        if (_movementStrategy is not null)
-        {
-            _movementStrategy.ResetBeforeDestroy(this);
-        }
-        _movementStrategy = MovementStrategyEnumUtil.GetMovementStrategy(newMovementStrategy);
-    }
+    //jump
+    private const float JumpForce = 650f;
+    private const float JumpGravityModifier = 2f;
+    private static readonly Vector3 InitialGravity = Physics.gravity;
+    private bool _keyIsBeingPressed = false;
     
     public void SetAnimationTrigger(string triggerName)
     { 
@@ -53,7 +48,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _inputActions = new PlayerInputActions();
-        _movementStrategy = new JumpStrategy();
     }
     
     private void OnEnable()
@@ -61,6 +55,7 @@ public class PlayerController : MonoBehaviour
         _inputActions.Player.Enable();
         _inputActions.Player.PlayerAction.performed += OnActionKeyPress;
         _inputActions.Player.PlayerAction.canceled += OnActionKeyRelease;
+        Physics.gravity = InitialGravity * JumpGravityModifier;
     }
 
     private void OnDisable()
@@ -112,33 +107,38 @@ public class PlayerController : MonoBehaviour
     {
         if (_isGameOver) return;
         
-        _movementStrategy.Update(this);
+        if ( !_keyIsBeingPressed || ! IsOnGround) return;
+        
+        IsOnGround = false;
+        PlayerRb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+        SetAnimationTrigger("Jump_trig"); 
+        PlayJumpSound();
     }
 
     private void OnActionKeyPress(InputAction.CallbackContext context)
     {
         if (_isGameOver) return;
         
-        _movementStrategy.OnActionKeyPressed(this);
+        _keyIsBeingPressed = true;
+
     }
 
     private void OnActionKeyRelease(InputAction.CallbackContext context)
     {
         if (_isGameOver) return;
         
-        _movementStrategy.OnActionKeyReleased(this);
+        _keyIsBeingPressed = false;
     }
     #endregion
 
     private void OnPlayerDied()
     {
-        _gameManager.OnPlayerDied();
         _isGameOver = true;
         explosionParticle.Play();
         dirtParticle.Stop();
         _playerAnim.SetBool("Death_b", true);
         _playerAnim.SetInteger("DeathType_int", 1);
         _playerAudio.PlayOneShot(crashSound, 1);
-        _movementStrategy.ResetBeforeDestroy(this);
+        Physics.gravity = InitialGravity;
     }
 }

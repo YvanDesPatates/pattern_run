@@ -20,7 +20,6 @@ public class GameManager: MonoBehaviour
     
     public void OnPlayerDied()
     {
-        GameOverPublisher.GetInstance().GameOver();
         gameOverCanvas.SetActive(true);
         StartCoroutine(WaitAndAllowRestart());
     }

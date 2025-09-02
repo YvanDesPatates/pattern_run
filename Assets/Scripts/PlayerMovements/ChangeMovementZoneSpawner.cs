@@ -1,26 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class ChangeMovementZoneSpawner : MonoBehaviour, IGameOverSubscriber
+public class ChangeMovementZoneSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject changeMovementZonePrefab;
     [SerializeField] private float minSpawningIntervalInS = 5f;
     [SerializeField] private float maxSpawningIntervalInS = 10f;
-    [SerializeField] private List<MovementStrategyAndMaterialEntry> iconMaterials;
+    [SerializeField] private List<MovementEnumAndMaterialEntry> iconMaterials;
         
-    private bool _isFirstSpawn = true;
-    private MovementStrategyEnum _currentStrategy;
-    private bool _isGameOver = false;
-
-    public void OnGameOver()
-    {
-        _isGameOver = true;
-    }
+    private MovementEnum _current;
 
     private void Start()
     {
-        GameOverPublisher.GetInstance().Subscribe(this);
         StartCoroutine(SpawnChangeMovementZone(0));
     }
 
@@ -28,14 +22,12 @@ public class ChangeMovementZoneSpawner : MonoBehaviour, IGameOverSubscriber
     {
         yield return new WaitForSeconds(delayInSeconds);
         
-        if (_isGameOver) yield break;
-        
         InstantiateChangeMovementZone();
         float nextDelay = Random.Range(minSpawningIntervalInS, maxSpawningIntervalInS);
         StartCoroutine(SpawnChangeMovementZone(nextDelay));
     }
     
-    private Material GetMaterialForIcon(MovementStrategyEnum type)
+    private Material GetMaterialForIcon(MovementEnum type)
     {
         foreach (var entry in iconMaterials)
         {
@@ -51,19 +43,10 @@ public class ChangeMovementZoneSpawner : MonoBehaviour, IGameOverSubscriber
         GameObject zone = Instantiate(changeMovementZonePrefab, transform.position, Quaternion.identity);
         ChangeMovementTypeZone changeMovementTypeZone = Util.GetComponentOrLogError<ChangeMovementTypeZone>(zone);   
         
-        MovementStrategyEnum newMovementStrategy;
-        if (_isFirstSpawn)
-        {
-            newMovementStrategy = MovementStrategyEnum.GravityInvertion;
-            _isFirstSpawn = false;
-        }
-        else
-        {
-            newMovementStrategy = MovementStrategyEnumUtil.GetRandomMovementStrategyExceptOne(_currentStrategy);   
-        }
+        MovementEnum newMovement = (MovementEnum) Random.Range(0, Enum.GetValues(typeof(MovementEnum)).Length);
         
-        Material iconMaterial = GetMaterialForIcon(newMovementStrategy);
-        changeMovementTypeZone.Initialize(iconMaterial, newMovementStrategy);
-        _currentStrategy = newMovementStrategy;
+        Material iconMaterial = GetMaterialForIcon(newMovement);
+        changeMovementTypeZone.Initialize(iconMaterial, newMovement);
+        _current = newMovement;
     }
 }

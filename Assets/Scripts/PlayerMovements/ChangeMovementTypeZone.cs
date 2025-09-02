@@ -1,15 +1,14 @@
-using System;
 using UnityEngine;
 
 public class ChangeMovementTypeZone : MonoBehaviour
 {
     [SerializeField] private GameObject icon;
     
-    private MovementStrategyEnum _newMovementStrategy;
+    private MovementEnum _newMovement;
 
-    public void Initialize(Material inconMaterial, MovementStrategyEnum newMovementStrategy)
+    public void Initialize(Material inconMaterial, MovementEnum newMovement)
     {
-        _newMovementStrategy = newMovementStrategy;
+        _newMovement = newMovement;
         Renderer iconRenderer = icon.GetComponent<Renderer>();
         iconRenderer.material = inconMaterial;
     }
@@ -19,7 +18,6 @@ public class ChangeMovementTypeZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerController player = Util.GetComponentOrLogError<PlayerController>(other.gameObject);
-            player.ChangeMovementStrategy(_newMovementStrategy);
         }
     }
 }
