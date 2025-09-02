@@ -10504,7 +10504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   changeMovementZonePrefab: {fileID: 7245057262557494329, guid: 4039ceaf0ccb126f19a4f2e264da6627, type: 3}
   minSpawningIntervalInS: 5
-  maxSpawningIntervalInS: 30
+  maxSpawningIntervalInS: 10
   iconMaterials:
   - strategy: 3
     material: {fileID: 2100000, guid: c9a4518cf3664f12ea5ec938dd0bb9ff, type: 2}
