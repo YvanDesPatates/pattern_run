@@ -1,7 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ObstaclesSpawnManager : MonoBehaviour
+public class ObstaclesSpawnManager : MonoBehaviour, IGameOverSubscriber
 {
     [SerializeField] private GameObject obstaclePrefab;
     [SerializeField] private float minRangeSpawnInSec;
@@ -15,8 +15,15 @@ public class ObstaclesSpawnManager : MonoBehaviour
     private float _spawnCoolDown = 0;
     private bool _isGameOver;
     
+    public void OnGameOver()
+    {
+        _isGameOver = true;
+    }
+
     private void Start()
     {
+        GameOverPublisher.GetInstance().Subscribe(this);
+
         _spawnPos = new Vector3(25, ySpawnPosition, 0);
         _lastSpawnTime = Time.time;
     }
