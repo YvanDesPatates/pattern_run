@@ -133,6 +133,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnPlayerDied()
     {
+        _gameManager.OnPlayerDied();
         _isGameOver = true;
         explosionParticle.Play();
         dirtParticle.Stop();
